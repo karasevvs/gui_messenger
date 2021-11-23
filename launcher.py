@@ -1,18 +1,25 @@
+"""Лаунчер"""
+
 import subprocess
 
-process = []
+PROCESS = []
 
 while True:
-    action = input('Выберите действие: q - выход , s - запустить сервер и клиенты, x - закрыть все окна:')
+    ACTION = input('Выберите действие: q - выход, '
+                   's - запустить сервер и клиенты, x - закрыть все окна: ')
 
-    if action == 'q':
+    if ACTION == 'q':
         break
-    elif action == 's':
-        process.append(subprocess.Popen('python server.py', creationflags=subprocess.CREATE_NEW_CONSOLE))
-        process.append(subprocess.Popen('python client.py -n test1', creationflags=subprocess.CREATE_NEW_CONSOLE))
-        process.append(subprocess.Popen('python client.py -n test2', creationflags=subprocess.CREATE_NEW_CONSOLE))
-        process.append(subprocess.Popen('python client.py -n test3', creationflags=subprocess.CREATE_NEW_CONSOLE))
-    elif action == 'x':
-        while process:
-            victim = process.pop()
-            victim.kill()
+    elif ACTION == 's':
+        PROCESS.append(subprocess.Popen('python server.py',
+                                        creationflags=subprocess.CREATE_NEW_CONSOLE))
+        for i in range(2):
+            PROCESS.append(subprocess.Popen('python client.py -m send',
+                                            creationflags=subprocess.CREATE_NEW_CONSOLE))
+        for i in range(5):
+            PROCESS.append(subprocess.Popen('python client.py -m listen',
+                                            creationflags=subprocess.CREATE_NEW_CONSOLE))
+    elif ACTION == 'x':
+        while PROCESS:
+            VICTIM = PROCESS.pop()
+            VICTIM.kill()
